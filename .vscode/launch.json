@@ -4,6 +4,12 @@
             "type": "java",
             "name": "CodeLens (Launch) - CarApp",
             "request": "launch",
+            "mainClass": "CarApp"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - CarApp",
+            "request": "launch",
             "mainClass": "CarApp",
             "projectName": "CSY1020 Assignment 2"
         }
