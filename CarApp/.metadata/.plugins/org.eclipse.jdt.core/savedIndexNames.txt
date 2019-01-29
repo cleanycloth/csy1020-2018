@@ -1,0 +1,1 @@
+INDEX VERSION 1.131+/Volumes/SANDISK 64/CarApp/.metadata/.plugins/org.eclipse.jdt.core

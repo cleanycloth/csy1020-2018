@@ -1,0 +1,2 @@
+INDEX VERSION 1.131+/Users/aidan/Documents/GitHub/csy1020-2018/.metadata/.plugins/org.eclipse.jdt.core
+2995344557.index
