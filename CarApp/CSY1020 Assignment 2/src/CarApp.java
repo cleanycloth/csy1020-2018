@@ -5,22 +5,23 @@ import javax.swing.*;
  
 public class CarApp extends JFrame 
 {
-
+	//Added this next line to stop Java from pointlessly whinging.
 	private static final long serialVersionUID = 1L;
 	//Define new labels, text fields, buttons, and panels.
 	//d_ tagged objects are set to be disabled (i.e. non-clickable disabled buttons).
 	private JLabel OptionLabel, SquareLabel, DirectionLabel;
     private JTextField OptionText, SquareText, DirectionText;
     private JButton ExitButton, UpButton, DownButton, LeftButton, RightButton ,d_UpLeftButton, d_UpRightButton, d_CentreButton, d_DownLeftButton, d_DownRightButton;
-    private JPanel MainPanel, RightPanel, BottomPanel, DirectionPanel, TopPanel;
+    private JPanel MainPanel, RightPanel, BottomPanel, DirectionPanel, TopPanel, ActionsPanel, SliderPanel, TimerPanel, OptionsPanel;
     
     //Create main frame
     public static void main (String[] args)
     {
         CarApp frame; 
         frame = new CarApp();
-        frame.setSize(1024, 768);
-        frame.createGUI();
+        frame.setSize(810, 650);
+		frame.createGUI();
+		frame.setResizable(false);
         frame.setVisible(true);
     }
 
@@ -29,27 +30,48 @@ public class CarApp extends JFrame
     {
     	Container window = getContentPane();
     	MainPanel = new JPanel();
-        MainPanel.setPreferredSize(new Dimension(800, 600));
+        MainPanel.setPreferredSize(new Dimension(636, 532));
         MainPanel.setBackground(Color.BLACK);
         window.add(MainPanel);
         
         RightPanel = new JPanel();
-        RightPanel.setPreferredSize(new Dimension(190, 600));
+        RightPanel.setPreferredSize(new Dimension(150, 532));
         RightPanel.setBackground(Color.PINK);
         window.add(RightPanel);
         
         BottomPanel = new JPanel();
-        BottomPanel.setPreferredSize(new Dimension(995, 50));
+        BottomPanel.setPreferredSize(new Dimension(780, 50));
         BottomPanel.setBackground(Color.GREEN);
         window.add(BottomPanel);
         
         TopPanel = new JPanel();
-        TopPanel.setPreferredSize (new Dimension(190,100));
+        TopPanel.setPreferredSize (new Dimension(150,100));
         TopPanel.setBackground(Color.ORANGE);
         
         DirectionPanel = new JPanel();
-        DirectionPanel.setPreferredSize (new Dimension(190,120));
-        DirectionPanel.setBackground(Color.RED);
+        DirectionPanel.setPreferredSize (new Dimension(150,120));
+		DirectionPanel.setBackground(Color.RED);
+
+		TimerPanel = new JPanel();
+		TimerPanel.setPreferredSize (new Dimension(150,150));
+		TimerPanel.setBackground(Color.DARK_GRAY);
+		
+		OptionsPanel = new JPanel();
+		OptionsPanel.setPreferredSize (new Dimension(150,50));
+		OptionsPanel.setBackground(Color.GREEN);
+		
+		ActionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		ActionsPanel.setPreferredSize (new Dimension (300,30));
+		ActionsPanel.setBackground(Color.BLUE);
+		BottomPanel.add(ActionsPanel);
+
+		SliderPanel = new JPanel();
+		SliderPanel.setPreferredSize (new Dimension(300,30));
+		SliderPanel.setBackground(Color.LIGHT_GRAY);
+		BottomPanel.add(SliderPanel);
+
+		
+
     }
 
 
@@ -85,9 +107,12 @@ public class CarApp extends JFrame
 	        TopPanel.add(DirectionLabel);
 	        TopPanel.add(DirectionText);
 
-	        RightPanel.add(DirectionPanel);
+			RightPanel.add(DirectionPanel);
 	        GridLayout directionLayout = new GridLayout(3,3);
-	        DirectionPanel.setLayout(directionLayout);
+			DirectionPanel.setLayout(directionLayout);
+			
+			RightPanel.add(TimerPanel);
+			RightPanel.add(OptionsPanel);
 	        
 	        //Create exit button
 	        ExitButton = new JButton("Exit");
@@ -128,7 +153,7 @@ public class CarApp extends JFrame
 	        d_DownLeftButton.setEnabled(false);
 	        d_DownRightButton.setEnabled(false);
 	        d_CentreButton.setEnabled(false);
-	        
+		
 	    //Make the exit button exit the program 
         ExitButton.addActionListener(new ActionListener()
         {
