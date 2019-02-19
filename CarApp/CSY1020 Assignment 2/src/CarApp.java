@@ -11,14 +11,15 @@ public class CarApp extends JFrame
 	//d_ tagged objects are set to be disabled (i.e. non-clickable disabled buttons).
 	private JLabel OptionLabel, SquareLabel, DirectionLabel;
     private JTextField OptionText, SquareText, DirectionText;
-    private JButton ExitButton, UpButton, DownButton, LeftButton, RightButton ,d_UpLeftButton, d_UpRightButton, d_CentreButton, d_DownLeftButton, d_DownRightButton;
+    private JButton ExitButton, UpButton, DownButton, LeftButton, RightButton ,d_UpLeftButton, d_UpRightButton, d_CentreButton, d_DownLeftButton, d_DownRightButton, ActButton, RunButton, ResetButton, Op1Button, Op2Button, Op3Button;
     private JPanel MainPanel, RightPanel, BottomPanel, DirectionPanel, TopPanel, ActionsPanel, SliderPanel, TimerPanel, OptionsPanel;
-    
+    private JSlider SpeedSlider;
     //Create main frame
     public static void main (String[] args)
     {
         CarApp frame; 
-        frame = new CarApp();
+		frame = new CarApp();
+		frame.setTitle("CCarCrash - Car Race Application");
         frame.setSize(810, 650);
 		frame.createGUI();
 		frame.setResizable(false);
@@ -40,7 +41,7 @@ public class CarApp extends JFrame
         window.add(RightPanel);
         
         BottomPanel = new JPanel();
-        BottomPanel.setPreferredSize(new Dimension(780, 50));
+        BottomPanel.setPreferredSize(new Dimension(790, 50));
         BottomPanel.setBackground(Color.GREEN);
         window.add(BottomPanel);
         
@@ -53,24 +54,36 @@ public class CarApp extends JFrame
 		DirectionPanel.setBackground(Color.RED);
 
 		TimerPanel = new JPanel();
-		TimerPanel.setPreferredSize (new Dimension(150,150));
+		TimerPanel.setPreferredSize (new Dimension(150,120));
 		TimerPanel.setBackground(Color.DARK_GRAY);
 		
 		OptionsPanel = new JPanel();
 		OptionsPanel.setPreferredSize (new Dimension(150,50));
 		OptionsPanel.setBackground(Color.GREEN);
+		GridLayout OptionsLayout = new GridLayout(2,2);
+		OptionsPanel.setLayout(OptionsLayout);
+		OptionsLayout.setHgap(1);
+		OptionsLayout.setVgap(1);
 		
 		ActionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		ActionsPanel.setPreferredSize (new Dimension (300,30));
+		ActionsPanel.setPreferredSize (new Dimension (480,40));
 		ActionsPanel.setBackground(Color.BLUE);
 		BottomPanel.add(ActionsPanel);
 
 		SliderPanel = new JPanel();
-		SliderPanel.setPreferredSize (new Dimension(300,30));
+		SliderPanel.setPreferredSize (new Dimension(300,40));
 		SliderPanel.setBackground(Color.LIGHT_GRAY);
 		BottomPanel.add(SliderPanel);
 
+		SpeedSlider = new JSlider();
+		SliderPanel.add(SpeedSlider);
 		
+		ActButton = new JButton("Act");
+		RunButton = new JButton("Run");
+		ResetButton = new JButton("Reset");
+		ActionsPanel.add(ActButton);
+		ActionsPanel.add(RunButton);
+		ActionsPanel.add(ResetButton);
 
     }
 
@@ -114,10 +127,6 @@ public class CarApp extends JFrame
 			RightPanel.add(TimerPanel);
 			RightPanel.add(OptionsPanel);
 	        
-	        //Create exit button
-	        ExitButton = new JButton("Exit");
-	        RightPanel.add(ExitButton);
-	        
 	        //Create directional buttons
 	        
         	d_UpLeftButton = new JButton("");
@@ -145,7 +154,18 @@ public class CarApp extends JFrame
 	        DirectionPanel.add(DownButton);
 
 	        d_DownRightButton = new JButton("");
-	        DirectionPanel.add(d_DownRightButton);     	
+			DirectionPanel.add(d_DownRightButton);    
+			
+			//Create option buttons
+			Op1Button = new JButton("Option 1");
+			Op2Button = new JButton("Option 2");
+			Op3Button = new JButton("Option 3");
+			ExitButton = new JButton("Exit");
+			OptionsPanel.add(Op1Button);
+			OptionsPanel.add(Op2Button);
+			OptionsPanel.add(Op3Button);
+			OptionsPanel.add(ExitButton);
+
 	        
 	        //Disable non-clickable buttons
 	        d_UpLeftButton.setEnabled(false);
