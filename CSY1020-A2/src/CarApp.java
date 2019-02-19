@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
  
  
@@ -11,19 +12,23 @@ public class CarApp extends JFrame
 	//d_ tagged objects are set to be disabled (i.e. non-clickable disabled buttons).
 	private JLabel OptionLabel, SquareLabel, DirectionLabel;
     private JTextField OptionText, SquareText, DirectionText;
-    private JButton ExitButton, UpButton, DownButton, LeftButton, RightButton ,d_UpLeftButton, d_UpRightButton, d_CentreButton, d_DownLeftButton, d_DownRightButton, ActButton, RunButton, ResetButton, Op1Button, Op2Button, Op3Button;
+    private JButton ExitButton, UpButton, DownButton, LeftButton, RightButton ,d_UpLeftButton, d_UpRightButton, d_CentreButton, d_DownLeftButton, d_DownRightButton, ActButton, RunButton, ResetButton, Op1Button, Op2Button, Op3Button, CompassButton;
     private JPanel MainPanel, RightPanel, BottomPanel, DirectionPanel, TopPanel, ActionsPanel, SliderPanel, TimerPanel, OptionsPanel;
-    private JSlider SpeedSlider;
+	private JSlider SpeedSlider;
+	private static JMenuBar MenuBar;
+	private JMenu ScenarioMenu, EditMenu, ControlsMenu, HelpMenu;
     //Create main frame
     public static void main (String[] args)
     {
+		MenuBar = new JMenuBar();
         CarApp frame; 
 		frame = new CarApp();
 		frame.setTitle("CCarCrash - Car Race Application");
         frame.setSize(810, 650);
 		frame.createGUI();
 		frame.setResizable(false);
-        frame.setVisible(true);
+		frame.setJMenuBar(MenuBar);
+		frame.setVisible(true);
     }
 
     private void createPanels()
@@ -37,7 +42,6 @@ public class CarApp extends JFrame
         
         RightPanel = new JPanel();
         RightPanel.setPreferredSize(new Dimension(150, 532));
-        RightPanel.setBackground(Color.PINK);
         window.add(RightPanel);
         
         BottomPanel = new JPanel();
@@ -47,23 +51,18 @@ public class CarApp extends JFrame
         
         TopPanel = new JPanel();
         TopPanel.setPreferredSize (new Dimension(150,100));
-        TopPanel.setBackground(Color.ORANGE);
         
         DirectionPanel = new JPanel();
         DirectionPanel.setPreferredSize (new Dimension(150,120));
-		DirectionPanel.setBackground(Color.RED);
 
 		TimerPanel = new JPanel();
 		TimerPanel.setPreferredSize (new Dimension(150,120));
 		TimerPanel.setBackground(Color.DARK_GRAY);
 		
 		OptionsPanel = new JPanel();
-		OptionsPanel.setPreferredSize (new Dimension(150,50));
-		OptionsPanel.setBackground(Color.GREEN);
+		OptionsPanel.setPreferredSize (new Dimension(150,70));
 		GridLayout OptionsLayout = new GridLayout(2,2);
 		OptionsPanel.setLayout(OptionsLayout);
-		OptionsLayout.setHgap(1);
-		OptionsLayout.setVgap(1);
 		
 		ActionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		ActionsPanel.setPreferredSize (new Dimension (480,40));
@@ -165,14 +164,38 @@ public class CarApp extends JFrame
 			OptionsPanel.add(Op2Button);
 			OptionsPanel.add(Op3Button);
 			OptionsPanel.add(ExitButton);
+			Op1Button.setMargin(new Insets(1, 1, 1, 1) );
+			Op2Button.setMargin(new Insets(1, 1, 1, 1) );
+			Op3Button.setMargin(new Insets(1, 1, 1, 1) );
+			ExitButton.setMargin(new Insets(1, 1, 1, 1) );
 
+			ScenarioMenu = new JMenu("Scenario");
+			MenuBar.add(ScenarioMenu);
+			EditMenu = new JMenu("Edit");
+			MenuBar.add(EditMenu);
+			ControlsMenu = new JMenu("Controls");
+			MenuBar.add(ControlsMenu);
+			HelpMenu = new JMenu("Help");
+			MenuBar.add(HelpMenu);
+
+
+			CompassButton = new JButton();
+			RightPanel.add(CompassButton);
+			try{
+				Image compass = ImageIO.read(getClass().getResource("resources/north.jpg"));
+				CompassButton.setIcon(new ImageIcon(compass));
+			}
+			catch (Exception ex) {
+				System.out.println(ex);
+			}
+			CompassButton.setMargin(new Insets(1, 1, 1, 1) );
 	        
 	        //Disable non-clickable buttons
 	        d_UpLeftButton.setEnabled(false);
 	        d_UpRightButton.setEnabled(false);
 	        d_DownLeftButton.setEnabled(false);
 	        d_DownRightButton.setEnabled(false);
-	        d_CentreButton.setEnabled(false);
+			d_CentreButton.setEnabled(false);
 		
 	    //Make the exit button exit the program 
         ExitButton.addActionListener(new ActionListener()
