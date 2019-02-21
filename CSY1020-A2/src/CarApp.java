@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
  
  
@@ -10,13 +9,15 @@ public class CarApp extends JFrame
 	private static final long serialVersionUID = 1L;
 	//Define new labels, text fields, buttons, and panels.
 	//d_ tagged objects are set to be disabled (i.e. non-clickable disabled buttons).
-	private JLabel OptionLabel, SquareLabel, DirectionLabel;
+	private JLabel OptionLabel, SquareLabel, DirectionLabel, TimerLabel, SliderLabel;
     private JTextField OptionText, SquareText, DirectionText;
     private JButton ExitButton, UpButton, DownButton, LeftButton, RightButton ,d_UpLeftButton, d_UpRightButton, d_CentreButton, d_DownLeftButton, d_DownRightButton, ActButton, RunButton, ResetButton, Op1Button, Op2Button, Op3Button, CompassButton;
     private JPanel MainPanel, RightPanel, BottomPanel, DirectionPanel, TopPanel, ActionsPanel, SliderPanel, TimerPanel, OptionsPanel;
 	private JSlider SpeedSlider;
 	private static JMenuBar MenuBar;
 	private JMenu ScenarioMenu, EditMenu, ControlsMenu, HelpMenu;
+	private JMenuItem testitem;
+	private ImageIcon compassIcon;
     //Create main frame
     public static void main (String[] args)
     {
@@ -27,6 +28,7 @@ public class CarApp extends JFrame
         frame.setSize(810, 650);
 		frame.createGUI();
 		frame.setResizable(false);
+		//frame.setLocationRelativeTo(null); ADD THIS BACK IN LATER TO COMPLETE WORK
 		frame.setJMenuBar(MenuBar);
 		frame.setVisible(true);
     }
@@ -36,7 +38,7 @@ public class CarApp extends JFrame
     {
     	Container window = getContentPane();
     	MainPanel = new JPanel();
-        MainPanel.setPreferredSize(new Dimension(636, 532));
+        MainPanel.setPreferredSize(new Dimension(642, 538));
         MainPanel.setBackground(Color.BLACK);
         window.add(MainPanel);
         
@@ -46,7 +48,6 @@ public class CarApp extends JFrame
         
         BottomPanel = new JPanel();
         BottomPanel.setPreferredSize(new Dimension(790, 50));
-        BottomPanel.setBackground(Color.GREEN);
         window.add(BottomPanel);
         
         TopPanel = new JPanel();
@@ -57,7 +58,6 @@ public class CarApp extends JFrame
 
 		TimerPanel = new JPanel();
 		TimerPanel.setPreferredSize (new Dimension(150,120));
-		TimerPanel.setBackground(Color.DARK_GRAY);
 		
 		OptionsPanel = new JPanel();
 		OptionsPanel.setPreferredSize (new Dimension(150,70));
@@ -66,18 +66,19 @@ public class CarApp extends JFrame
 		
 		ActionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		ActionsPanel.setPreferredSize (new Dimension (480,40));
-		ActionsPanel.setBackground(Color.BLUE);
 		BottomPanel.add(ActionsPanel);
 
 		SliderPanel = new JPanel();
 		SliderPanel.setPreferredSize (new Dimension(300,40));
-		SliderPanel.setBackground(Color.LIGHT_GRAY);
 		BottomPanel.add(SliderPanel);
-
+		SliderLabel = new JLabel("Speed:");
+		SliderPanel.add(SliderLabel);
 		SpeedSlider = new JSlider();
 		SliderPanel.add(SpeedSlider);
 		
+		//Action buttons
 		ActButton = new JButton("Act");
+		
 		RunButton = new JButton("Run");
 		ResetButton = new JButton("Reset");
 		ActionsPanel.add(ActButton);
@@ -155,6 +156,9 @@ public class CarApp extends JFrame
 	        d_DownRightButton = new JButton("");
 			DirectionPanel.add(d_DownRightButton);    
 			
+			TimerLabel = new JLabel("Digital Timer");
+			TimerPanel.add(TimerLabel);
+
 			//Create option buttons
 			Op1Button = new JButton("Option 1");
 			Op2Button = new JButton("Option 2");
@@ -178,16 +182,14 @@ public class CarApp extends JFrame
 			HelpMenu = new JMenu("Help");
 			MenuBar.add(HelpMenu);
 
+			testitem = new JMenuItem("test");
+			ScenarioMenu.add(testitem);
 
+			compassIcon = new ImageIcon("resources/north.jpg");
 			CompassButton = new JButton();
+			CompassButton.setIcon(compassIcon);
 			RightPanel.add(CompassButton);
-			try{
-				Image compass = ImageIO.read(getClass().getResource("resources/north.jpg"));
-				CompassButton.setIcon(new ImageIcon(compass));
-			}
-			catch (Exception ex) {
-				System.out.println(ex);
-			}
+			
 			CompassButton.setMargin(new Insets(1, 1, 1, 1) );
 	        
 	        //Disable non-clickable buttons
