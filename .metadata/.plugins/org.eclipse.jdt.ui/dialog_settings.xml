@@ -2,10 +2,10 @@
 <section name="Workbench">
 	<section name="FatJarPackageWizard">
 		<item value="/Users/aidan/Documents/GitHub/csy1020-2018" key="FatJarPackageWizardPage.ANTSCRIPT_LOCATION"/>
-		<item value="CarApp (1) - CSY1020-A2" key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME"/>
+		<item value="CCarCrash - CSY1020-A2" key="FatJarPackageWizardPage.LAUNCH_CONFIGURATION_SELECTION_NAME"/>
 		<item value="/Users/aidan/Desktop/test.jar" key="FatJarPackageWizardPage.DESTINATION_PATH_SELECTION"/>
 		<item value="false" key="FatJarPackageWizardPage.ANTSCRIPT_SAVE"/>
-		<item value="1" key="FatJarPackageWizardPage.LIBRARY_HANDLING"/>
+		<item value="2" key="FatJarPackageWizardPage.LIBRARY_HANDLING"/>
 		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
 			<item value="/Users/aidan/Desktop/test.jar"/>
 		</list>
