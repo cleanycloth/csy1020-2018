@@ -242,7 +242,12 @@ public class CCarCrash extends JFrame
 			MenuBar.add(HelpMenu);
 
 			//Create selections for menu items
-			ExitMenuItem = new JMenuItem("Exit");
+			ExitMenuItem = new JMenuItem(new AbstractAction("Exit"){
+			private static final long serialVersionUID = 1L;
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+			});
 			ScenarioMenu.add(ExitMenuItem);
 			HelpMenuItem = new JMenuItem(new AbstractAction("Help Topics"){
 			private static final long serialVersionUID = 1L; //ignore thx
