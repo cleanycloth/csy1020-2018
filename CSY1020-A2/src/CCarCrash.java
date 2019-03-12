@@ -19,11 +19,12 @@ public class CCarCrash extends JFrame
 	private JMenu ScenarioMenu, EditMenu, ControlsMenu, HelpMenu;
 	private JMenuItem ExitMenuItem, HelpMenuItem, AboutMenuItem;
 	private ImageIcon CompassIcon, ActIcon, RunIcon, ResetIcon, BGEmptyIcon;
-    //Create main frame
+	//Create main frame
+	
     public static void main (String[] args)
     {
 		MenuBar = new JMenuBar();
-        CCarCrash frame; 
+		CCarCrash frame; 
 		frame = new CCarCrash();
 		frame.setTitle("CCarCrash - Car Race Application");
         frame.setSize(810, 650);
@@ -59,10 +60,10 @@ public class CCarCrash extends JFrame
         TopPanel.setPreferredSize (new Dimension(150,100));
         
         DirectionPanel = new JPanel();
-        DirectionPanel.setPreferredSize (new Dimension(150,120));
+        DirectionPanel.setPreferredSize (new Dimension(150,100));
 
 		TimerLabelPanel = new JPanel();
-		TimerLabelPanel.setPreferredSize (new Dimension(150,120));
+		TimerLabelPanel.setPreferredSize (new Dimension(150,140));
 		
 		OptionsPanel = new JPanel();
 		OptionsPanel.setPreferredSize (new Dimension(150,70));
@@ -74,11 +75,20 @@ public class CCarCrash extends JFrame
 		BottomPanel.add(ActionsPanel);
 
 		SliderPanel = new JPanel();
+		GridBagConstraints c = new GridBagConstraints();
 		SliderPanel.setPreferredSize (new Dimension(290,40));
+		SliderPanel.setLayout(new GridBagLayout());
 		BottomPanel.add(SliderPanel);
 		SliderLabel = new JLabel("Speed:");
+		c.gridx = 0;
+		c.gridy = 0;
 		SliderPanel.add(SliderLabel);
-		SpeedSlider = new JSlider();
+		SpeedSlider = new JSlider(JSlider.HORIZONTAL, 10, 60, 35);
+		c.gridx = 0;
+		c.gridy = 1;
+		SpeedSlider.setMajorTickSpacing(10);
+		SpeedSlider.setMinorTickSpacing(5);
+		SpeedSlider.setPaintTicks(true);
 		SliderPanel.add(SpeedSlider);
 		
 		//Action buttons
@@ -139,12 +149,12 @@ public class CCarCrash extends JFrame
 			RightPanel.add(DirectionPanel);
 			
 			//Place Timer Container
-			GridLayout timerLabelPanelLayout = new GridLayout(4,1);
+			GridLayout timerLabelPanelLayout = new GridLayout(5,1);
 			TimerLabelPanel.setLayout(timerLabelPanelLayout);
 			RightPanel.add(TimerLabelPanel);
 			
 			//Create Timer Label
-			TimerLabel = new JLabel("Digital Timer");
+			TimerLabel = new JLabel("DIGITAL TIMER");
 			TimerLabel.setHorizontalAlignment(JLabel.CENTER);
 			TimerLabelPanel.add(TimerLabel);
 
@@ -234,15 +244,27 @@ public class CCarCrash extends JFrame
 			//Create selections for menu items
 			ExitMenuItem = new JMenuItem("Exit");
 			ScenarioMenu.add(ExitMenuItem);
-			HelpMenuItem = new JMenuItem("Help Topics");
+			HelpMenuItem = new JMenuItem(new AbstractAction("Help Topics"){
+			private static final long serialVersionUID = 1L; //ignore thx
+			public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null,"I can't help you yet. Sorry!","Help Unavailable",JOptionPane.PLAIN_MESSAGE);
+				}
+			});
 			HelpMenu.add(HelpMenuItem);
-			AboutMenuItem = new JMenuItem("About");
+			AboutMenuItem = new JMenuItem(new AbstractAction("About"){
+			private static final long serialVersionUID = 1L; //ignore thx
+			public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null,"This application has been written by Aidan Rayner,\nfor the University of Northampton CSY1020\nProblem Solving and Programming Course, in Term 2.","About This Program",JOptionPane.INFORMATION_MESSAGE);
+				}
+			});
 			HelpMenu.add(AboutMenuItem);
 
 			//Create compass button (NOTE: This should change depending on direction, but does not do that yet!)
 			CompassIcon = new ImageIcon("resources/north.jpg");
 			CompassButton = new JButton();
+			CompassButton.setEnabled(false);
 			CompassButton.setIcon(CompassIcon);
+			CompassButton.setDisabledIcon(CompassIcon);
 			RightPanel.add(CompassButton);
 			
 			CompassButton.setMargin(new Insets(1, 1, 1, 1) );
@@ -260,7 +282,9 @@ public class CCarCrash extends JFrame
 			{
 				GridButtons[nC] = new JButton();
 				MainPanel.add(GridButtons[nC]);
+				GridButtons[nC].setEnabled(false);
 				GridButtons[nC].setIcon(BGEmptyIcon);
+				GridButtons[nC].setDisabledIcon(BGEmptyIcon);
 			}
 
 		
