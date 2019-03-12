@@ -18,7 +18,7 @@ public class CCarCrash extends JFrame
 	private static JMenuBar MenuBar;
 	private JMenu ScenarioMenu, EditMenu, ControlsMenu, HelpMenu;
 	private JMenuItem ExitMenuItem, HelpMenuItem, AboutMenuItem;
-	private ImageIcon CompassIcon, ActIcon, RunIcon, ResetIcon, BGEmptyIcon;
+	private ImageIcon CompassIcon, ActIcon, RunIcon, ResetIcon, BGEmptyIcon, BGHorizTrack;
 	//Create main frame
 	
     public static void main (String[] args)
@@ -247,7 +247,7 @@ public class CCarCrash extends JFrame
 			HelpMenuItem = new JMenuItem(new AbstractAction("Help Topics"){
 			private static final long serialVersionUID = 1L; //ignore thx
 			public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null,"I can't help you yet. Sorry!","Help Unavailable",JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(null,"The program is used as follows:\nW: Up\nS: Down\nA: Left\nD: Right\nAct performs one step\nRun drives the car automatically\nReset will reset all on screen values,\nand reset all positions\nOption buttons for different modes\nThe rest should be self-explanatory.","Quick Help",JOptionPane.WARNING_MESSAGE);
 				}
 			});
 			HelpMenu.add(HelpMenuItem);
@@ -278,15 +278,26 @@ public class CCarCrash extends JFrame
 
 			//Add buttons to main window
 			BGEmptyIcon = new ImageIcon("resources/space.png");
-			for (int nC=0; nC<208; nC++)
+			BGHorizTrack = new ImageIcon("resources/wall-horiz.png");
+			for (int nC=0; nC<208; nC++) 
 			{
 				GridButtons[nC] = new JButton();
 				MainPanel.add(GridButtons[nC]);
 				GridButtons[nC].setEnabled(false);
-				GridButtons[nC].setIcon(BGEmptyIcon);
-				GridButtons[nC].setDisabledIcon(BGEmptyIcon);
+				if (nC == 0) {
+					GridButtons[nC].setIcon(BGHorizTrack);
+					GridButtons[nC].setDisabledIcon(BGHorizTrack);
+				}
+				if (nC >= 1  && nC < 15) {
+					GridButtons[nC].setIcon(BGHorizTrack);
+					GridButtons[nC].setDisabledIcon(BGHorizTrack);
+				}
+				else {
+					GridButtons[nC].setIcon(BGEmptyIcon);
+					GridButtons[nC].setDisabledIcon(BGEmptyIcon);
+				}
+				
 			}
-
 		
 	    //Make the exit button exit the program 
         ExitButton.addActionListener(new ActionListener()
