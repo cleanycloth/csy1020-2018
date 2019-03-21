@@ -1,9 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Arrays;
  
  
-public class CCarCrash extends JFrame 
+public class CCarCrash extends JFrame implements ActionListener
 {
 	//Added this next line to stop Java from pointlessly whinging.
 	private static final long serialVersionUID = 1L;
@@ -18,7 +19,11 @@ public class CCarCrash extends JFrame
 	private static JMenuBar MenuBar;
 	private JMenu ScenarioMenu, EditMenu, ControlsMenu, HelpMenu;
 	private JMenuItem ExitMenuItem, HelpMenuItem, AboutMenuItem;
-	private ImageIcon CompassIcon, ActIcon, RunIcon, ResetIcon, BGEmptyIcon, BGHorizTrack;
+	private ImageIcon CompassIcon, ActIcon, RunIcon, ResetIcon, BGEmptyIcon, BGHorizTrack, BGTopLeft, BGTopRight, BGVertTrack, BGBottomLeft, BGBottomRight;
+	Integer[] intbox = {67,83,99,115,131,147,76,92,108,124,140,156};
+	Integer[] walls = {16,32,48,64,80,96,112,128,144,160,176,31,47,63,79,95,111,127,143,159,175,191,207};
+	Integer[] ceilfloor = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,193,194,195,196,197,198,199,200,201,202,203,204,205,206};
+	Integer[] intceilfloor = {52,53,54,55,56,57,58,59,148,149,150,151,152,153,154,155};
 	//Create main frame
 	
     public static void main (String[] args)
@@ -38,6 +43,7 @@ public class CCarCrash extends JFrame
     private void createPanels()
     //Generate panels to be put on the main frame.
     {
+		//Create Main panel, which contains the buttons used to create the car driving grid.
     	Container window = getContentPane();
     	MainPanel = new JPanel();
 		MainPanel.setPreferredSize(new Dimension(636, 542));
@@ -45,26 +51,32 @@ public class CCarCrash extends JFrame
 		MainPanel.setLayout(MainLayout);
 		MainPanel.setBorder(BorderFactory.createRaisedBevelBorder());
         window.add(MainPanel);
-        
+		
+		//Create right sidebar, which contains thing such as the arrow buttons, timer etc.
         RightPanel = new JPanel();
 		RightPanel.setPreferredSize(new Dimension(156, 542));
 		RightPanel.setBorder(BorderFactory.createRaisedBevelBorder());
         window.add(RightPanel);
-        
+		
+		//Create bottom bar, which contains the act/run/reset buttons, and speed slider.
         BottomPanel = new JPanel();
 		BottomPanel.setPreferredSize(new Dimension(797, 50));
 		BottomPanel.setBorder(BorderFactory.createRaisedBevelBorder());
         window.add(BottomPanel);
-        
+		
+		//Create Top panel for right sidebar. Contains option, square, and direction boxes.
         TopPanel = new JPanel();
         TopPanel.setPreferredSize (new Dimension(150,100));
-        
+		
+		//Create Direction panel for right sidebar. Contains the up/down/left/right buttons.
         DirectionPanel = new JPanel();
         DirectionPanel.setPreferredSize (new Dimension(150,100));
 
+		//Create Timer Label panel for the right sidebar. This contains the "DIGITAL TIMER" text.
 		TimerLabelPanel = new JPanel();
 		TimerLabelPanel.setPreferredSize (new Dimension(150,140));
 		
+		//Create Options panel for the right sidebar. This contains the options 1/2/3 buttons and Exit.
 		OptionsPanel = new JPanel();
 		OptionsPanel.setPreferredSize (new Dimension(150,70));
 		GridLayout OptionsLayout = new GridLayout(2,2);
@@ -109,7 +121,9 @@ public class CCarCrash extends JFrame
 		ActionsPanel.add(ResetButton);
 
     }
-
+	public static boolean contains(Integer[] arr, Integer item) {
+		return Arrays.stream(arr).anyMatch(item::equals);
+	}
 
     private void createGUI() 
     //Generate interface in main frame.
@@ -231,6 +245,8 @@ public class CCarCrash extends JFrame
 			Op3Button.setMargin(new Insets(1, 1, 1, 1) );
 			ExitButton.setMargin(new Insets(1, 1, 1, 1) );
 
+			ExitButton.addActionListener(this);
+
 			//Create menu bar and menu items
 			ScenarioMenu = new JMenu("Scenario");
 			MenuBar.add(ScenarioMenu);
@@ -242,27 +258,17 @@ public class CCarCrash extends JFrame
 			MenuBar.add(HelpMenu);
 
 			//Create selections for menu items
-			ExitMenuItem = new JMenuItem(new AbstractAction("Exit"){
-			private static final long serialVersionUID = 1L;
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-			});
+			ExitMenuItem = new JMenuItem("Exit");
 			ScenarioMenu.add(ExitMenuItem);
-			HelpMenuItem = new JMenuItem(new AbstractAction("Help Topics"){
-			private static final long serialVersionUID = 1L; //ignore thx
-			public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null,"The program is used as follows:\nW: Up\nS: Down\nA: Left\nD: Right\nAct performs one step\nRun drives the car automatically\nReset will reset all on screen values,\nand reset all positions\nOption buttons for different modes\nThe rest should be self-explanatory.","Quick Help",JOptionPane.WARNING_MESSAGE);
-				}
-			});
+			ExitMenuItem.addActionListener(this);
+			
+			HelpMenuItem = new JMenuItem("Help Topics");
 			HelpMenu.add(HelpMenuItem);
-			AboutMenuItem = new JMenuItem(new AbstractAction("About"){
-			private static final long serialVersionUID = 1L; //ignore thx
-			public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null,"This application has been written by Aidan Rayner,\nfor the University of Northampton CSY1020\nProblem Solving and Programming Course, in Term 2.","About This Program",JOptionPane.INFORMATION_MESSAGE);
-				}
-			});
+			HelpMenuItem.addActionListener(this);
+
+			AboutMenuItem = new JMenuItem("About");
 			HelpMenu.add(AboutMenuItem);
+			AboutMenuItem.addActionListener(this);
 
 			//Create compass button (NOTE: This should change depending on direction, but does not do that yet!)
 			CompassIcon = new ImageIcon("resources/north.jpg");
@@ -284,35 +290,61 @@ public class CCarCrash extends JFrame
 			//Add buttons to main window
 			BGEmptyIcon = new ImageIcon("resources/space.png");
 			BGHorizTrack = new ImageIcon("resources/wall-horiz.png");
+			BGVertTrack = new ImageIcon("resources/wall-vert.png");
+			BGTopLeft = new ImageIcon("resources/wall-NW.png");
+			BGTopRight = new ImageIcon("resources/wall-NE.png");
+			BGBottomLeft = new ImageIcon("resources/wall-SW.png");
+			BGBottomRight = new ImageIcon("resources/wall-SE.png");
+			
+			
+
 			for (int nC=0; nC<208; nC++) 
 			{
 				GridButtons[nC] = new JButton();
 				MainPanel.add(GridButtons[nC]);
 				GridButtons[nC].setEnabled(false);
-				if (nC == 0) {
+				if (nC == 0 | nC == 51) {
+					GridButtons[nC].setIcon(BGTopLeft);
+					GridButtons[nC].setDisabledIcon(BGTopLeft);
+				}
+				else if (nC == 15 | nC == 60) {
+					GridButtons[nC].setIcon(BGTopRight);
+					GridButtons[nC].setDisabledIcon(BGTopRight);
+				}
+				else if (nC == 192 | nC == 147){
+					GridButtons[nC].setIcon(BGBottomLeft);
+					GridButtons[nC].setDisabledIcon(BGBottomLeft);
+				}
+				else if (nC == 207 | nC == 156) {
+					GridButtons[nC].setIcon(BGBottomRight);
+					GridButtons[nC].setDisabledIcon(BGBottomRight);
+				}
+				else if (contains(ceilfloor,nC) | contains(intceilfloor,nC)) {
 					GridButtons[nC].setIcon(BGHorizTrack);
 					GridButtons[nC].setDisabledIcon(BGHorizTrack);
 				}
-				if (nC >= 1  && nC < 15) {
-					GridButtons[nC].setIcon(BGHorizTrack);
-					GridButtons[nC].setDisabledIcon(BGHorizTrack);
+				else if (contains(intbox,nC) | contains(walls,nC)) {
+					GridButtons[nC].setIcon(BGVertTrack);
+					GridButtons[nC].setDisabledIcon(BGVertTrack);
 				}
 				else {
 					GridButtons[nC].setIcon(BGEmptyIcon);
 					GridButtons[nC].setDisabledIcon(BGEmptyIcon);
 				}
-				
 			}
-		
-	    //Make the exit button exit the program 
-        ExitButton.addActionListener(new ActionListener()
-        {
-        	public void actionPerformed(ActionEvent e)
-        		{
-        			System.exit(0);
-        		}
-        });
-
+	
     }
-    
+    public void actionPerformed(ActionEvent event) {
+		Object source = event.getSource();
+		if ((source == ExitButton) | (source == ExitMenuItem)) {
+			System.exit(0);
+		}
+		if (source == HelpMenuItem) {
+			JOptionPane.showMessageDialog(null,"The program is used as follows:\nW: Up\nS: Down\nA: Left\nD: Right\nAct performs one step\nRun drives the car automatically\nReset will reset all on screen values,\nand reset all positions\nOption buttons for different modes\nThe rest should be self-explanatory.","Quick Help",JOptionPane.PLAIN_MESSAGE, new ImageIcon("resources/helpbook.png"));
+		}
+		if (source == AboutMenuItem) {
+			JOptionPane.showMessageDialog(null,"This application has been written by Aidan Rayner,\nfor the University of Northampton CSY1020\nProblem Solving and Programming Course, in Term 2.","About This Program",JOptionPane.INFORMATION_MESSAGE, new ImageIcon("resources/user.png"));
+		}
+
+	}
 }
