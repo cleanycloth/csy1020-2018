@@ -273,10 +273,9 @@ public class CCarCrash extends JFrame implements ActionListener
 			//Create compass button (NOTE: This should change depending on direction, but does not do that yet!)
 			CompassIcon = new ImageIcon("resources/north.jpg");
 			CompassButton = new JButton();
-			CompassButton.setEnabled(false);
 			CompassButton.setIcon(CompassIcon);
-			CompassButton.setDisabledIcon(CompassIcon);
 			RightPanel.add(CompassButton);
+			CompassButton.addActionListener(this);
 			
 			CompassButton.setMargin(new Insets(1, 1, 1, 1) );
 	        
@@ -337,13 +336,20 @@ public class CCarCrash extends JFrame implements ActionListener
     public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if ((source == ExitButton) | (source == ExitMenuItem)) {
-			System.exit(0);
+			int exitquestion = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Exit", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+			System.out.println(exitquestion);
+			if (exitquestion == 0) {
+				System.exit(0);
+			}
 		}
 		if (source == HelpMenuItem) {
 			JOptionPane.showMessageDialog(null,"The program is used as follows:\nW: Up\nS: Down\nA: Left\nD: Right\nAct performs one step\nRun drives the car automatically\nReset will reset all on screen values,\nand reset all positions\nOption buttons for different modes\nThe rest should be self-explanatory.","Quick Help",JOptionPane.PLAIN_MESSAGE, new ImageIcon("resources/helpbook.png"));
 		}
 		if (source == AboutMenuItem) {
 			JOptionPane.showMessageDialog(null,"This application has been written by Aidan Rayner,\nfor the University of Northampton CSY1020\nProblem Solving and Programming Course, in Term 2.","About This Program",JOptionPane.INFORMATION_MESSAGE, new ImageIcon("resources/user.png"));
+		}
+		if (source == CompassButton) {
+			JOptionPane.showMessageDialog(null,"The current direction is: <INSERT DIRECTION HERE, CHANGE ICON ACCORDINGLY>","Current Direction",JOptionPane.INFORMATION_MESSAGE,new ImageIcon("resources/north.jpg"));
 		}
 
 	}
