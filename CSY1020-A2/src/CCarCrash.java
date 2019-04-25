@@ -301,6 +301,7 @@ public class CCarCrash extends JFrame implements ActionListener
 			{
 				GridButtons[nC] = new JButton();
 				MainPanel.add(GridButtons[nC]);
+				GridButtons[nC].setBorderPainted(false);
 				GridButtons[nC].setEnabled(false);
 				if (nC == 0 | nC == 51) {
 					GridButtons[nC].setIcon(BGTopLeft);
