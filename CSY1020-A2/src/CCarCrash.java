@@ -19,11 +19,13 @@ public class CCarCrash extends JFrame implements ActionListener
 	private static JMenuBar MenuBar;
 	private JMenu ScenarioMenu, EditMenu, ControlsMenu, HelpMenu;
 	private JMenuItem ExitMenuItem, HelpMenuItem, AboutMenuItem;
-	private ImageIcon CompassIcon, ActIcon, RunIcon, ResetIcon, BGEmptyIcon, BGHorizTrack, BGTopLeft, BGTopRight, BGVertTrack, BGBottomLeft, BGBottomRight;
+	private ImageIcon CompassEast, CompassWest, CompassNorth, CompassSouth, ActIcon, RunIcon, ResetIcon, BGEmptyIcon, BGHorizTrack, BGTopLeft, BGTopRight, BGVertTrack, BGBottomLeft, BGBottomRight, CarEast, CarWest, CarNorth, CarSouth;
 	Integer[] intbox = {67,83,99,115,131,147,76,92,108,124,140,156};
 	Integer[] walls = {16,32,48,64,80,96,112,128,144,160,176,31,47,63,79,95,111,127,143,159,175,191,207};
 	Integer[] ceilfloor = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,193,194,195,196,197,198,199,200,201,202,203,204,205,206};
 	Integer[] intceilfloor = {52,53,54,55,56,57,58,59,148,149,150,151,152,153,154,155};
+	int startpos = 17;
+	int currentpos = startpos;
 	//Create main frame
 	
     public static void main (String[] args)
@@ -35,7 +37,7 @@ public class CCarCrash extends JFrame implements ActionListener
         frame.setSize(810, 650);
 		frame.createGUI();
 		frame.setResizable(false);
-		//frame.setLocationRelativeTo(null); ADD THIS BACK IN LATER TO COMPLETE WORK
+		//frame.setLocationRelativeTo(null); //ADD THIS BACK IN LATER TO COMPLETE WORK
 		frame.setJMenuBar(MenuBar);
 		frame.setVisible(true);
     }
@@ -46,7 +48,7 @@ public class CCarCrash extends JFrame implements ActionListener
 		//Create Main panel, which contains the buttons used to create the car driving grid.
     	Container window = getContentPane();
     	MainPanel = new JPanel();
-		MainPanel.setPreferredSize(new Dimension(636, 542));
+		MainPanel.setPreferredSize(new Dimension(620, 530));
         GridLayout MainLayout = new GridLayout(13,16);
 		MainPanel.setLayout(MainLayout);
 		MainPanel.setBorder(BorderFactory.createRaisedBevelBorder());
@@ -54,7 +56,7 @@ public class CCarCrash extends JFrame implements ActionListener
 		
 		//Create right sidebar, which contains thing such as the arrow buttons, timer etc.
         RightPanel = new JPanel();
-		RightPanel.setPreferredSize(new Dimension(156, 542));
+		RightPanel.setPreferredSize(new Dimension(156, 530));
 		RightPanel.setBorder(BorderFactory.createRaisedBevelBorder());
         window.add(RightPanel);
 		
@@ -70,11 +72,11 @@ public class CCarCrash extends JFrame implements ActionListener
 		
 		//Create Direction panel for right sidebar. Contains the up/down/left/right buttons.
         DirectionPanel = new JPanel();
-        DirectionPanel.setPreferredSize (new Dimension(150,100));
+        DirectionPanel.setPreferredSize (new Dimension(150,125));
 
 		//Create Timer Label panel for the right sidebar. This contains the "DIGITAL TIMER" text.
 		TimerLabelPanel = new JPanel();
-		TimerLabelPanel.setPreferredSize (new Dimension(150,140));
+		TimerLabelPanel.setPreferredSize (new Dimension(150,110));
 		
 		//Create Options panel for the right sidebar. This contains the options 1/2/3 buttons and Exit.
 		OptionsPanel = new JPanel();
@@ -109,6 +111,7 @@ public class CCarCrash extends JFrame implements ActionListener
 		RunButton = new JButton("Run");
 		RunButton.setMargin(new Insets(0,10,0,10) );
 		ResetButton = new JButton("Reset");
+		ResetButton.addActionListener(this);
 		ResetButton.setMargin(new Insets(0,10,0,10) );
 		ActionsPanel.add(ActButton);
 		ActIcon = new ImageIcon("resources/step.png");
@@ -125,7 +128,7 @@ public class CCarCrash extends JFrame implements ActionListener
 		return Arrays.stream(arr).anyMatch(item::equals);
 	}
 
-    private void createGUI() 
+    public void createGUI() 
     //Generate interface in main frame.
     //This involves actually creating the extra panels, buttons etc.
     {
@@ -146,13 +149,13 @@ public class CCarCrash extends JFrame implements ActionListener
 	        TopPanel.add(OptionText);
 
 	        SquareLabel = new JLabel("Square:");
-	        SquareText = new JTextField("1");
+	        SquareText = new JTextField(Integer.toString(startpos));
 	        SquareText.setHorizontalAlignment(JTextField.CENTER);
 	        TopPanel.add(SquareLabel);
 	        TopPanel.add(SquareText);
 
 	        DirectionLabel = new JLabel("Direction:");
-	        DirectionText = new JTextField("Up");
+	        DirectionText = new JTextField();
 	        DirectionText.setHorizontalAlignment(JTextField.CENTER);
 	        TopPanel.add(DirectionLabel);
 			TopPanel.add(DirectionText);
@@ -206,25 +209,29 @@ public class CCarCrash extends JFrame implements ActionListener
     		DirectionPanel.add(d_UpLeftButton);
     		
 	        UpButton = new JButton("↑");
-	        DirectionPanel.add(UpButton);
+			DirectionPanel.add(UpButton);
+			UpButton.addActionListener(this);
 	        
         	d_UpRightButton = new JButton("");
         	DirectionPanel.add(d_UpRightButton);
     		
     		LeftButton = new JButton("←");
-    		DirectionPanel.add(LeftButton);
+			DirectionPanel.add(LeftButton);
+			LeftButton.addActionListener(this);
     			
     		d_CentreButton = new JButton("");
     		DirectionPanel.add(d_CentreButton);
         	
         	RightButton = new JButton("→");
-        	DirectionPanel.add(RightButton);
+			DirectionPanel.add(RightButton);
+			RightButton.addActionListener(this);
         		
         	d_DownLeftButton = new JButton("");
         	DirectionPanel.add(d_DownLeftButton);
         	
 	        DownButton = new JButton("↓");
-	        DirectionPanel.add(DownButton);
+			DirectionPanel.add(DownButton);
+			DownButton.addActionListener(this);
 
 	        d_DownRightButton = new JButton("");
 			DirectionPanel.add(d_DownRightButton);    
@@ -245,6 +252,9 @@ public class CCarCrash extends JFrame implements ActionListener
 			Op3Button.setMargin(new Insets(1, 1, 1, 1) );
 			ExitButton.setMargin(new Insets(1, 1, 1, 1) );
 
+			Op1Button.addActionListener(this);
+			Op2Button.addActionListener(this);
+			Op3Button.addActionListener(this);
 			ExitButton.addActionListener(this);
 
 			//Create menu bar and menu items
@@ -271,9 +281,7 @@ public class CCarCrash extends JFrame implements ActionListener
 			AboutMenuItem.addActionListener(this);
 
 			//Create compass button (NOTE: This should change depending on direction, but does not do that yet!)
-			CompassIcon = new ImageIcon("resources/north.jpg");
 			CompassButton = new JButton();
-			CompassButton.setIcon(CompassIcon);
 			RightPanel.add(CompassButton);
 			CompassButton.addActionListener(this);
 			
@@ -286,7 +294,7 @@ public class CCarCrash extends JFrame implements ActionListener
 	        d_DownRightButton.setEnabled(false);
 			d_CentreButton.setEnabled(false);
 
-			//Add buttons to main window
+			//Load Icons
 			BGEmptyIcon = new ImageIcon("resources/space.png");
 			BGHorizTrack = new ImageIcon("resources/wall-horiz.png");
 			BGVertTrack = new ImageIcon("resources/wall-vert.png");
@@ -294,46 +302,113 @@ public class CCarCrash extends JFrame implements ActionListener
 			BGTopRight = new ImageIcon("resources/wall-NE.png");
 			BGBottomLeft = new ImageIcon("resources/wall-SW.png");
 			BGBottomRight = new ImageIcon("resources/wall-SE.png");
+			CarEast = new ImageIcon (new ImageIcon("resources/car-e.png").getImage().getScaledInstance(40,40, Image.SCALE_DEFAULT));
+			CarWest = new ImageIcon (new ImageIcon("resources/car-w.png").getImage().getScaledInstance(40,40, Image.SCALE_DEFAULT));
+			CarNorth = new ImageIcon (new ImageIcon("resources/car-n.png").getImage().getScaledInstance(40,40, Image.SCALE_DEFAULT));
+			CarSouth = new ImageIcon (new ImageIcon("resources/car-s.png").getImage().getScaledInstance(40,40, Image.SCALE_DEFAULT));
+			CompassEast = new ImageIcon("resources/east.jpg");
+			CompassWest = new ImageIcon("resources/west.jpg");
+			CompassNorth = new ImageIcon("resources/north.jpg");
+			CompassSouth = new ImageIcon("resources/south.jpg");
+			LoadFrontend();
 			
-			
-
-			for (int nC=0; nC<208; nC++) 
-			{
-				GridButtons[nC] = new JButton();
-				MainPanel.add(GridButtons[nC]);
-				GridButtons[nC].setBorderPainted(false);
-				GridButtons[nC].setEnabled(false);
-				if (nC == 0 | nC == 51) {
-					GridButtons[nC].setIcon(BGTopLeft);
-					GridButtons[nC].setDisabledIcon(BGTopLeft);
-				}
-				else if (nC == 15 | nC == 60) {
-					GridButtons[nC].setIcon(BGTopRight);
-					GridButtons[nC].setDisabledIcon(BGTopRight);
-				}
-				else if (nC == 192 | nC == 147){
-					GridButtons[nC].setIcon(BGBottomLeft);
-					GridButtons[nC].setDisabledIcon(BGBottomLeft);
-				}
-				else if (nC == 207 | nC == 156) {
-					GridButtons[nC].setIcon(BGBottomRight);
-					GridButtons[nC].setDisabledIcon(BGBottomRight);
-				}
-				else if (contains(ceilfloor,nC) | contains(intceilfloor,nC)) {
-					GridButtons[nC].setIcon(BGHorizTrack);
-					GridButtons[nC].setDisabledIcon(BGHorizTrack);
-				}
-				else if (contains(intbox,nC) | contains(walls,nC)) {
-					GridButtons[nC].setIcon(BGVertTrack);
-					GridButtons[nC].setDisabledIcon(BGVertTrack);
-				}
-				else {
-					GridButtons[nC].setIcon(BGEmptyIcon);
-					GridButtons[nC].setDisabledIcon(BGEmptyIcon);
-				}
+	}
+			//Add buttons to main window
+	public void LoadFrontend() {
+		for (int nC=0; nC<208; nC++) 
+		{
+			GridButtons[nC] = new JButton();
+			MainPanel.add(GridButtons[nC]);
+			GridButtons[nC].setBorderPainted(false);
+			GridButtons[nC].setEnabled(false);
+			if (nC == 0 | nC == 51) {
+				GridButtons[nC].setIcon(BGTopLeft);
+				GridButtons[nC].setDisabledIcon(BGTopLeft);
 			}
+			else if (nC == 15 | nC == 60) {
+				GridButtons[nC].setIcon(BGTopRight);
+				GridButtons[nC].setDisabledIcon(BGTopRight);
+			}
+			else if (nC == 192 | nC == 147){
+				GridButtons[nC].setIcon(BGBottomLeft);
+				GridButtons[nC].setDisabledIcon(BGBottomLeft);
+			}
+			else if (nC == 207 | nC == 156) {
+				GridButtons[nC].setIcon(BGBottomRight);
+				GridButtons[nC].setDisabledIcon(BGBottomRight);
+			}
+			else if (contains(ceilfloor,nC) | contains(intceilfloor,nC)) {
+				GridButtons[nC].setIcon(BGHorizTrack);
+				GridButtons[nC].setDisabledIcon(BGHorizTrack);
+			}
+			else if (contains(intbox,nC) | contains(walls,nC)) {
+				GridButtons[nC].setIcon(BGVertTrack);
+				GridButtons[nC].setDisabledIcon(BGVertTrack);
+			}
+			else {
+				GridButtons[nC].setIcon(BGEmptyIcon);
+				GridButtons[nC].setDisabledIcon(BGEmptyIcon);
+			}
+		}
+		currentpos = startpos;
+		CompassButton.setIcon(CompassEast);
+		DirectionText.setText("Right");
+		SquareText.setText(Integer.toString(currentpos));
+		GridButtons[startpos].setIcon(CarEast);
+		GridButtons[startpos].setDisabledIcon(CarEast);
+	}
+		public void ReloadFrontend() {
+			for (int nC=0; nC<208; nC++) {
+				MainPanel.remove(GridButtons[nC]);
+			}
+			LoadFrontend();
+		}	
+			
 	
-    }
+	public void movecar(String direction) {
+		if (direction == "Left") {
+			if (!contains(intbox,currentpos-1) && !contains(walls,currentpos-1)){
+				currentpos--;
+				GridButtons[currentpos].setIcon(CarWest);
+				GridButtons[currentpos].setDisabledIcon(CarWest);
+				GridButtons[currentpos+1].setIcon(BGEmptyIcon);
+				GridButtons[currentpos+1].setDisabledIcon(BGEmptyIcon);
+				CompassButton.setIcon(CompassWest);
+			}
+		}
+		else if (direction == "Right") {
+			if (!contains(intbox,currentpos+1) && !contains(walls,currentpos+1)){
+				currentpos++;
+				GridButtons[currentpos].setIcon(CarEast);
+				GridButtons[currentpos].setDisabledIcon(CarEast);
+				GridButtons[currentpos-1].setIcon(BGEmptyIcon);
+				GridButtons[currentpos-1].setDisabledIcon(BGEmptyIcon);
+				CompassButton.setIcon(CompassEast);
+			}
+		}
+		else if (direction == "Up") {
+			if (!contains(ceilfloor,currentpos-16) && !contains(intceilfloor,currentpos-16)){
+				currentpos-=16;
+				GridButtons[currentpos].setIcon(CarNorth);
+				GridButtons[currentpos].setDisabledIcon(CarNorth);
+				GridButtons[currentpos+16].setIcon(BGEmptyIcon);
+				GridButtons[currentpos+16].setDisabledIcon(BGEmptyIcon);
+				CompassButton.setIcon(CompassNorth);
+			}
+		}
+		else if (direction == "Down") {
+			if (!contains(ceilfloor,currentpos+16) && !contains(intceilfloor,currentpos+16)){
+				currentpos+=16;
+				GridButtons[currentpos].setIcon(CarSouth);
+				GridButtons[currentpos].setDisabledIcon(CarSouth);
+				GridButtons[currentpos-16].setIcon(BGEmptyIcon);
+				GridButtons[currentpos-16].setDisabledIcon(BGEmptyIcon);
+				CompassButton.setIcon(CompassSouth);
+			}
+		}
+		SquareText.setText(Integer.toString(currentpos));
+		DirectionText.setText(direction);
+	}
     public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if ((source == ExitButton) | (source == ExitMenuItem)) {
@@ -350,8 +425,26 @@ public class CCarCrash extends JFrame implements ActionListener
 			JOptionPane.showMessageDialog(null,"This application has been written by Aidan Rayner,\nfor the University of Northampton CSY1020\nProblem Solving and Programming Course, in Term 2.","About This Program",JOptionPane.INFORMATION_MESSAGE, new ImageIcon("resources/user.png"));
 		}
 		if (source == CompassButton) {
-			JOptionPane.showMessageDialog(null,"The current direction is: <INSERT DIRECTION HERE, CHANGE ICON ACCORDINGLY>","Current Direction",JOptionPane.INFORMATION_MESSAGE,new ImageIcon("resources/north.jpg"));
+			JOptionPane.showMessageDialog(null,"The current direction is: " + DirectionText.getText(),"Current Direction",JOptionPane.INFORMATION_MESSAGE,new ImageIcon("resources/north.jpg"));
 		}
-
+		if (source == LeftButton) {
+			movecar("Left");
+		}
+		if (source == RightButton) {
+			movecar("Right");
+		}
+		if (source == UpButton) {
+			movecar("Up");
+		}
+		if (source == DownButton) {
+			movecar("Down");
+		}
+		if (source == ResetButton) {
+			ReloadFrontend();
+		}
+		if (source == Op1Button) {
+			ReloadFrontend();
+			OptionText.setText("1");
+		}
 	}
 }
