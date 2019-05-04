@@ -1,35 +1,95 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.util.Arrays;
-//import java.util.Timer;
 
 public class CCarCrash extends JFrame implements ActionListener {
 	// Added this next line to stop Java from pointlessly whinging.
 	private static final long serialVersionUID = 1L;
 	// Define new labels, text fields, buttons, and panels.
-	// d_ tagged objects are set to be disabled (i.e. non-clickable disabled buttons).
+	// d_ tagged objects are set to be disabled (i.e. non-clickable disabled
+	// buttons).
 	private JLabel OptionLabel, SquareLabel, DirectionLabel, TimerLabel, SliderLabel, TimerSepLabel, TimerSepLabel2;
 	private JTextField OptionText, SquareText, DirectionText, HourText, MinuteText, SecondText;
-	private JButton ExitButton, UpButton, DownButton, LeftButton, RightButton, d_UpLeftButton, d_UpRightButton,d_CentreButton, d_DownLeftButton, d_DownRightButton, ActButton, RunButton, ResetButton, Op1Button,Op2Button, Op3Button, CompassButton;
+	private JButton ExitButton, UpButton, DownButton, LeftButton, RightButton, d_UpLeftButton, d_UpRightButton,
+			d_CentreButton, d_DownLeftButton, d_DownRightButton, ActButton, RunButton, ResetButton, Op1Button,
+			Op2Button, Op3Button, CompassButton;
 	private JButton GridButtons[] = new JButton[208];
-	private JPanel MainPanel, RightPanel, BottomPanel, DirectionPanel, TopPanel, ActionsPanel, SliderPanel,TimerLabelPanel, TimerPanel, OptionsPanel;
+	private JPanel MainPanel, RightPanel, BottomPanel, DirectionPanel, TopPanel, ActionsPanel, SliderPanel,
+			TimerLabelPanel, TimerPanel, OptionsPanel;
 	private JSlider SpeedSlider;
 	private static JMenuBar MenuBar;
 	private JMenu ScenarioMenu, EditMenu, ControlsMenu, HelpMenu;
 	private JMenuItem ExitMenuItem, HelpMenuItem, AboutMenuItem;
-	private ImageIcon CompassEast, CompassWest, CompassNorth, CompassSouth, ActIcon, RunIcon, ResetIcon, BGEmptyIcon,BGHorizTrack, BGTopLeft, BGTopRight, BGVertTrack, BGBottomLeft, BGBottomRight, CarEast, CarWest, CarNorth,CarSouth;
-	//Timer RunTimer = new Timer(true);
+	private ImageIcon CompassEast, CompassWest, CompassNorth, CompassSouth, ActIcon, RunIcon, ResetIcon, BGEmptyIcon,
+			BGHorizTrack, BGTopLeft, BGTopRight, BGVertTrack, BGBottomLeft, BGBottomRight, CarEast, CarWest, CarNorth,
+			CarSouth;
 	Integer[] intbox = { 67, 83, 99, 115, 131, 147, 76, 92, 108, 124, 140, 156 };
-	Integer[] walls = { 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 31, 47, 63, 79, 95, 111, 127, 143, 159, 175, 191, 207 };
-	Integer[] ceilfloor = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 193, 194, 195, 196, 197, 198, 199, 200, 201,	202, 203, 204, 205, 206 };
+	Integer[] walls = { 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 31, 47, 63, 79, 95, 111, 127, 143, 159, 175,
+			191, 207 };
+	Integer[] ceilfloor = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 193, 194, 195, 196, 197, 198, 199, 200, 201,
+			202, 203, 204, 205, 206 };
 	Integer[] intceilfloor = { 52, 53, 54, 55, 56, 57, 58, 59, 148, 149, 150, 151, 152, 153, 154, 155 };
 	Integer[] intcorners = { 51, 60, 147, 156 };
 	int startpos = 17;
 	int currentpos = startpos;
 	int ActButtonActive = 0;
+	int CurrentSpeed = 50;
+	int HourCount = 0;
+	int MinuteCount = 0;
+	int SecondCount = 0;
+	boolean isRunning = false;
 	// Create main frame
 
+	Timer timer = new Timer(1, new ActionListener() {
+		public void actionPerformed(ActionEvent evt) {
+			ActButtonActive = 1;
+			try {
+				Thread.sleep(CurrentSpeed);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			movecar(DirectionText.getText());
+		}
+	});
+
+	Timer digitaltimer = new Timer(1000, new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+			SecondCount++;
+			if (SecondCount == 60) {
+				SecondCount-=60;
+				MinuteCount+=1;
+			}
+			if (MinuteCount == 60) {
+				MinuteCount-=60;
+				HourCount+=1;
+			}
+			
+			if (SecondCount <= 9) {
+				SecondText.setText("0"+Integer.toString(SecondCount));
+			}
+			else {
+				SecondText.setText(Integer.toString(SecondCount));
+			}
+			
+			if (MinuteCount <= 9) {
+				MinuteText.setText("0"+Integer.toString(MinuteCount));
+			}
+			else {
+				MinuteText.setText(Integer.toString(MinuteCount));
+			}
+			if (HourCount <= 9) {
+				HourText.setText("0"+Integer.toString(HourCount));
+			}
+			else {
+				HourText.setText(Integer.toString(HourCount));
+			}
+		}
+	});
 	public static void main(String[] args) {
 		MenuBar = new JMenuBar();
 		CCarCrash frame;
@@ -98,13 +158,22 @@ public class CCarCrash extends JFrame implements ActionListener {
 		c.gridx = 0;
 		c.gridy = 0;
 		SliderPanel.add(SliderLabel);
-		SpeedSlider = new JSlider(JSlider.HORIZONTAL, 10, 60, 35);
+		SpeedSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+		SpeedSlider.setInverted(true);
+		SpeedSlider.addChangeListener(new ChangeListener(){
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				CurrentSpeed = ((JSlider)e.getSource()).getValue();
+				System.out.println(CurrentSpeed);
+			}
+		});
 		c.gridx = 0;
 		c.gridy = 1;
 		SpeedSlider.setMajorTickSpacing(10);
 		SpeedSlider.setMinorTickSpacing(5);
 		SpeedSlider.setPaintTicks(true);
 		SliderPanel.add(SpeedSlider);
+		
 
 		// Action buttons
 		ActButton = new JButton("Act");
@@ -358,6 +427,12 @@ public class CCarCrash extends JFrame implements ActionListener {
 		for (int nC = 0; nC < 208; nC++) {
 			MainPanel.remove(GridButtons[nC]);
 		}
+		HourCount = 0;
+		MinuteCount = 0;
+		SecondCount = 0;
+		HourText.setText("00");
+		MinuteText.setText("00");
+		SecondText.setText("00");
 		LoadFrontend();
 	}
 
@@ -430,6 +505,16 @@ public class CCarCrash extends JFrame implements ActionListener {
 		ActButtonActive = 0;
 	}
 
+	public void automatic(String mode) {
+		if ("run".equals(mode)) {
+			timer.start();
+		}
+		else {
+			timer.stop();
+		}
+		
+	}
+
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if ((source == ExitButton) | (source == ExitMenuItem)) {
@@ -472,6 +557,32 @@ public class CCarCrash extends JFrame implements ActionListener {
 			ActButtonActive = 1;
 			movecar(DirectionText.getText());
 		}
+		if (source == RunButton) {
+			if (isRunning) {
+				RunButton.setText("Run");
+				RunIcon = new ImageIcon("resources/run.png");
+				RunButton.setIcon(RunIcon);
+				ActButton.setEnabled(true);
+				ResetButton.setEnabled(true);
+				isRunning = false;
+				automatic("pause");
+				digitaltimer.stop();
+			}
+			else {
+				
+				RunButton.setText("Pause");
+				RunIcon = new ImageIcon("resources/pause.png");
+				RunButton.setIcon(RunIcon);
+				ActButton.setEnabled(false);
+				ResetButton.setEnabled(false);
+				isRunning = true;
+				automatic("run");
+				digitaltimer.start();
+			}
+		}
 	}
 	
+	
 }
+
+//Timer DigitalTimer = new Timer();
