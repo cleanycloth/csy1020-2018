@@ -24,14 +24,18 @@ public class CCarCrash extends JFrame implements ActionListener {
 	//d_ tagged objects are set to be disabled (i.e. non-clickable disabled buttons).
 	private JLabel OptionLabel, SquareLabel, DirectionLabel, TimerLabel, SliderLabel, TimerSepLabel, TimerSepLabel2;
 	private JTextField OptionText, SquareText, DirectionText, HourText, MinuteText, SecondText;
-	private JButton ExitButton, UpButton, DownButton, LeftButton, RightButton, d_UpLeftButton, d_UpRightButton, d_CentreButton, d_DownLeftButton, d_DownRightButton, ActButton, RunButton, ResetButton, Op1Button,Op2Button, Op3Button, CompassButton;
+	private JButton ExitButton, UpButton, DownButton, LeftButton, RightButton, d_UpLeftButton, d_UpRightButton, d_CentreButton, 
+	d_DownLeftButton, d_DownRightButton, ActButton, RunButton, ResetButton, Op1Button,Op2Button, Op3Button, CompassButton;
 	private JButton GridButtons[] = new JButton[208];
-	private JPanel MainPanel, RightPanel, BottomPanel, DirectionPanel, TopPanel, ActionsPanel, SliderPanel, TimerLabelPanel, TimerPanel, OptionsPanel;
+	private JPanel MainPanel, RightPanel, BottomPanel, DirectionPanel, TopPanel, ActionsPanel, SliderPanel, TimerLabelPanel, 
+	TimerPanel, OptionsPanel;
 	private JSlider SpeedSlider;
 	private static JMenuBar MenuBar;
 	private JMenu ScenarioMenu, EditMenu, ControlsMenu, HelpMenu;
 	private JMenuItem ExitMenuItem, HelpMenuItem, AboutMenuItem;
-	private ImageIcon CompassEast, CompassWest, CompassNorth, CompassSouth, ActIcon, RunIcon, ResetIcon, BGEmptyIcon, BGHorizTrack, BGTopLeft, BGTopRight, BGVertTrack, BGBottomLeft, BGBottomRight, CarEast, CarWest, CarNorth, CarSouth; //BGSandstone
+	private ImageIcon CompassEast, CompassWest, CompassNorth, CompassSouth, ActIcon, RunIcon, ResetIcon, BGEmptyIcon, BGHorizTrack, 
+	BGTopLeft, BGTopRight, BGVertTrack, BGBottomLeft, BGBottomRight, CarEast, CarWest, CarNorth, CarSouth; 
+	//BGSandstone would've been here if I used it.
 	//The next few lines describe the location of the internal and external walls, corners, and ceiling/floors.
 	Integer[] ceilfloor = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,193,194,195,196,197,198,199,200,201,202,203,204,205,206};
 	Integer[] walls = {16,32,48,64,80,96,112,128,144,160,176,31,47,63,79,95,111,127,143,159,175,191,207};
@@ -676,9 +680,12 @@ public class CCarCrash extends JFrame implements ActionListener {
 				RunButton.setText("Run");
 				RunIcon = new ImageIcon("resources/run.png");
 				RunButton.setIcon(RunIcon);
-				//Re-enable the act and reset buttons.
+				//Re-enable the act and reset buttons, and all three option buttons.
 				ActButton.setEnabled(true);
 				ResetButton.setEnabled(true);
+				Op1Button.setEnabled(true);
+				Op2Button.setEnabled(true);
+				Op3Button.setEnabled(true);
 				//Set isRunning to false. This means the program is not running.
 				isRunning = false;
 				//Stop all timers.
@@ -692,8 +699,12 @@ public class CCarCrash extends JFrame implements ActionListener {
 				RunButton.setIcon(RunIcon);
 				//Disable the act and reset buttons. This means the user cannot make one step
 				//or reset the application whilst the code is running.
+				//All three option buttons are disabled to disallow layout changes.
 				ActButton.setEnabled(false);
 				ResetButton.setEnabled(false);
+				Op1Button.setEnabled(false);
+				Op2Button.setEnabled(false);
+				Op3Button.setEnabled(false);
 				//Set isRunning to true. This means the program is running.
 				isRunning = true;
 				//Start the car movement timer and digital timer.
