@@ -183,64 +183,16 @@ public class CCarCrash extends JFrame implements ActionListener {
 		GridBagConstraints GridBagConstraint = new GridBagConstraints();
 		SliderPanel.setPreferredSize(new Dimension(290, 40));
 		SliderPanel.setLayout(new GridBagLayout());
-		//Create a label for the slider.
-		SliderLabel = new JLabel("Speed:");
-		//Add the panel.
-		BottomPanel.add(SliderPanel);
 		//Set the X and Y axis in the GridBag to zero. This centres it.
 		GridBagConstraint.gridx = 0;
 		GridBagConstraint.gridy = 0;
+		//Add the panel.
+		BottomPanel.add(SliderPanel);
+
+		//Create a label for the slider.
+		SliderLabel = new JLabel("Speed:");
 		//Add the label.
 		SliderPanel.add(SliderLabel);
-
-		//Create the slider. 
-		SpeedSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
-		//Instead of being 0-100, invert it so it is 100-0.
-		SpeedSlider.setInverted(true);
-		//Whenever the slider is changed, listen out for it and change the current speed accordingly
-		//by retrieving the value of the slider.
-		SpeedSlider.addChangeListener(new ChangeListener(){
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				CurrentSpeed = ((JSlider)e.getSource()).getValue();
-			}
-		});
-		//Set the slider to be slightly lower. This makes it look centred.
-		GridBagConstraint.gridx = 0;
-		GridBagConstraint.gridy = 1;
-		//Set the major slider marks to be 10 apart, and the minor ones 5 apart. Add them to the slider.
-		SpeedSlider.setMajorTickSpacing(10);
-		SpeedSlider.setMinorTickSpacing(5);
-		SpeedSlider.setPaintTicks(true);
-		//Add the slider.
-		SliderPanel.add(SpeedSlider);
-		
-
-		//Action buttons
-		ActButton = new JButton("Act");
-		RunButton = new JButton("Run");
-		ResetButton = new JButton("Reset");
-		
-		//Set the size of the buttons to have 10px either side of them.
-		ActButton.setMargin(new Insets(0, 10, 0, 10));
-		RunButton.setMargin(new Insets(0, 10, 0, 10));
-		ResetButton.setMargin(new Insets(0, 10, 0, 10));
-		//Set the icons to the appropriate files.
-		ActIcon = new ImageIcon("resources/step.png");
-		RunIcon = new ImageIcon("resources/run.png");
-		ResetIcon = new ImageIcon("resources/reset.png");
-		//Give the buttons their icons.
-		ActButton.setIcon(ActIcon);
-		RunButton.setIcon(RunIcon);
-		ResetButton.setIcon(ResetIcon);
-		//Add the buttons to the panel.
-		ActionsPanel.add(ActButton);
-		ActionsPanel.add(RunButton);
-		ActionsPanel.add(ResetButton);
-		//Add listeners to them to detect button presses.
-		ActButton.addActionListener(this);
-		RunButton.addActionListener(this);
-		ResetButton.addActionListener(this);
 
 	}
 	//Source: https://www.wikitechy.com/technology/can-test-array-contains-certain-value/
@@ -401,6 +353,55 @@ public class CCarCrash extends JFrame implements ActionListener {
 		Op2Button.addActionListener(this);
 		Op3Button.addActionListener(this);
 		ExitButton.addActionListener(this);
+
+		//Create the slider. 
+		SpeedSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+		GridBagConstraints GridBagConstraint = new GridBagConstraints();
+		//Instead of being 0-100, invert it so it is 100-0.
+		SpeedSlider.setInverted(true);
+		//Whenever the slider is changed, listen out for it and change the current speed accordingly
+		//by retrieving the value of the slider.
+		SpeedSlider.addChangeListener(new ChangeListener(){
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				CurrentSpeed = ((JSlider)e.getSource()).getValue();
+			}
+		});
+		//Set the slider to be slightly lower. This makes it look centred.
+		GridBagConstraint.gridx = 0;
+		GridBagConstraint.gridy = 1;
+		//Set the major slider marks to be 10 apart, and the minor ones 5 apart. Add them to the slider.
+		SpeedSlider.setMajorTickSpacing(10);
+		SpeedSlider.setMinorTickSpacing(5);
+		SpeedSlider.setPaintTicks(true);
+		//Add the slider.
+		SliderPanel.add(SpeedSlider);
+		
+		//Action buttons
+		ActButton = new JButton("Act");
+		RunButton = new JButton("Run");
+		ResetButton = new JButton("Reset");
+		
+		//Set the size of the buttons to have 10px either side of them.
+		ActButton.setMargin(new Insets(0, 10, 0, 10));
+		RunButton.setMargin(new Insets(0, 10, 0, 10));
+		ResetButton.setMargin(new Insets(0, 10, 0, 10));
+		//Set the icons to the appropriate files.
+		ActIcon = new ImageIcon("resources/step.png");
+		RunIcon = new ImageIcon("resources/run.png");
+		ResetIcon = new ImageIcon("resources/reset.png");
+		//Give the buttons their icons.
+		ActButton.setIcon(ActIcon);
+		RunButton.setIcon(RunIcon);
+		ResetButton.setIcon(ResetIcon);
+		//Add the buttons to the panel.
+		ActionsPanel.add(ActButton);
+		ActionsPanel.add(RunButton);
+		ActionsPanel.add(ResetButton);
+		//Add listeners to them to detect button presses.
+		ActButton.addActionListener(this);
+		RunButton.addActionListener(this);
+		ResetButton.addActionListener(this);
 
 		//Create menu bar and menu items
 		ScenarioMenu = new JMenu("Scenario");
