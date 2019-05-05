@@ -189,8 +189,6 @@ public class CCarCrash extends JFrame implements ActionListener {
 		//Add the panel.
 		BottomPanel.add(SliderPanel);
 
-		
-
 	}
 	//Source: https://www.wikitechy.com/technology/can-test-array-contains-certain-value/
 	//Scroll to the bottom of the page to find the code used.
@@ -355,7 +353,7 @@ public class CCarCrash extends JFrame implements ActionListener {
 		SliderLabel = new JLabel("Speed:");
 		//Add the label.
 		SliderPanel.add(SliderLabel);
-		
+
 		//Create the slider. 
 		SpeedSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
 		GridBagConstraints GridBagConstraint = new GridBagConstraints();
@@ -383,7 +381,6 @@ public class CCarCrash extends JFrame implements ActionListener {
 		ActButton = new JButton("Act");
 		RunButton = new JButton("Run");
 		ResetButton = new JButton("Reset");
-		
 		//Set the size of the buttons to have 10px either side of them.
 		ActButton.setMargin(new Insets(0, 10, 0, 10));
 		RunButton.setMargin(new Insets(0, 10, 0, 10));
